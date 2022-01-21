@@ -1,55 +1,37 @@
-import { PrismaClient } from "@prisma/client";
-import { ApolloServer, gql } from "apollo-server-micro";
+import { ApolloServer } from "apollo-server-micro";
+import resolversBlogPosts from "./blogPosts/resolvers";
+import typeDefsBlogPosts from "./blogPosts/typeDefs";
 
-const prisma = new PrismaClient();
-
-const typeDefs = gql`
-  type BlogPost {
-    id: String
-    text: String
-  }
-
-  type Query {
-    blogPosts: [BlogPost]
-  }
-
-  type Mutation {
-    addBlogPost(text: String!): BlogPost
-    editBlogPost(id: String!, text: String!): BlogPost
-    deleteBlogPost(id: String!): BlogPost
-  }
-`;
-const resolvers = {
-  Query: {
-    blogPosts: (_parents, _args, _context) => {
-      return prisma.blogPost.findMany();
-    },
-  },
-
-  Mutation: {
-    addBlogPost: (_parents, args, _context) => {
-      return prisma.blogPost.create({
-        data: { text: args.text }
-      });
-    },
-    editBlogPost: (_parents, args, _context) => {
-      return prisma.blogPost.update({
-        where: { id: args.id },
-        data: { text: args.text }
-      });
-    },
-    deleteBlogPost: (_parents, args, _context) => {
-      return prisma.blogPost.delete({
-        where: { id: args.id }
-      });
-    }
-  },
-};
+const typeDefs = [typeDefsBlogPosts]
+const resolvers = { ...resolversBlogPosts }
 
 const apolloServer = new ApolloServer({ typeDefs, resolvers });
 
-const handler = apolloServer.createHandler({ path: "/api/graphql" });
+const startServer = apolloServer.start()
 
-export const config = { api: { bodyParser: false } };
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://studio.apollographql.com'
+  )
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  if (req.method === 'OPTIONS') {
+    res.end()
+    return false
+  }
 
-export default handler;
+  await startServer
+  await apolloServer.createHandler({
+    path: '/api/graphql',
+  })(req, res)
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
