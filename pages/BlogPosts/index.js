@@ -12,8 +12,12 @@ const GET_BLOGPOSTS = gql`
 `
 
 const BlogPosts = () => {
-  const [posts, setPosts] = useState()
   const { loading, error, data } = useQuery(GET_BLOGPOSTS)
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    setPosts(data?.blogPosts)
+  }, [data])
 
   if (loading) {
     return "Loading..."
@@ -22,11 +26,6 @@ const BlogPosts = () => {
   if (error) {
     return "Error..."
   }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    setPosts(data?.blogPosts);
-  }, [data])
 
   return (
     <>
