@@ -1,19 +1,16 @@
-import { useQuery, gql } from '@apollo/client'
-import { Box, Button, Flex, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { useQuery, useMutation } from '@apollo/client'
+import { Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-const GET_BLOGPOSTS = gql`
-  query {
-    blogPosts {
-      id
-      text
-    }
-  }
-`
+import { GET_BLOGPOSTS, DELETE_BLOGPOST } from "./queries"
+import NewPost from "./NewPost";
+import ListPosts from "./ListPosts";
 
 const BlogPosts = () => {
   const { loading, error, data } = useQuery(GET_BLOGPOSTS)
   const [posts, setPosts] = useState([])
+  const [text, setText] = useState("")
+
 
   useEffect(() => {
     setPosts(data?.blogPosts)
@@ -30,16 +27,8 @@ const BlogPosts = () => {
   return (
     <>
       <Flex width={"100vw"} alignItems={"center"} marginTop={20} flexDirection={"column"}>
-        <FormControl width={400}>
-          <FormLabel>Novo Post</FormLabel>
-          <Input id="newPost" type="text" placeholder="Novo Post" />
-          <Button colorScheme="blue" mt={4}>Adicionar</Button>
-        </FormControl>
-        {posts?.map((post) => (
-          <Box bg="whitesmoke" key={post?.id} padding={5} width={400} marginY={2} borderRadius={8}>
-            <p>{post?.text}</p>
-          </Box>
-        ))}
+        <NewPost text={text} setText={setText} />
+        <ListPosts posts={posts} setPosts={setPosts} />
       </Flex>
     </>
   );
