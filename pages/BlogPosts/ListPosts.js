@@ -28,7 +28,15 @@ const ListPosts = ({ posts, setPosts }) => {
   return (
     <>
       {posts?.map((post, index) => (
-        <Flex bg="whitesmoke" key={post?.id} padding={5} width={400} marginY={2} borderRadius={8} flexDirection={"column"}>
+        <Flex
+          bg="whitesmoke"
+          key={post?.id}
+          padding={5}
+          width={400}
+          marginY={2}
+          borderRadius={8}
+          flexDirection={"column"}
+        >
           <form onSubmit={() => onEdit(post?.id, post?.text)}>
             <Input
               id="post-text"
