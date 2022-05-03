@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useQuery, useMutation } from '@apollo/client'
-import { ADD_BLOGPOST } from "./queries";
+import { ADD_BLOGPOST } from "../../services/queries";
 
 const NewPost = ({ text, setText }) => {
   const [addBlogPost] = useMutation(ADD_BLOGPOST, {

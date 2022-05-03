@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Flex, Input } from '@chakra-ui/react';
 import { useMutation } from "@apollo/client"
 
-import { DELETE_BLOGPOST, EDIT_BLOGPOST } from "./queries"
+import { DELETE_BLOGPOST, EDIT_BLOGPOST } from "../../services/queries"
 
 const ListPosts = ({ posts, setPosts }) => {
   const [deleteBlogPost] = useMutation(DELETE_BLOGPOST, {

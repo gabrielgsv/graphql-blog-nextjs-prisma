@@ -3,7 +3,7 @@ import { Flex } from '@chakra-ui/react';
 import Image from "next/image"
 import { useEffect, useState } from 'react';
 
-import { GET_BLOGPOSTS, DELETE_BLOGPOST } from "./queries"
+import { GET_BLOGPOSTS, DELETE_BLOGPOST } from "../../services/queries"
 import NewPost from "./NewPost";
 import ListPosts from "./ListPosts";
 import image from "../../images/next-graphql-apollo.jpg"
